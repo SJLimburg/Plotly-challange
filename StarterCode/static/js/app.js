@@ -1,15 +1,14 @@
 // will need an event to read the test subject id entered - FOr id="selDataset" need to add option values and text for all names
-let subject = 1;
-let subjectID = 941;
-console.log(`start with subject ${subject}`);
-makeCharts(subject);
+
+let subjectID = 940;
+console.log(`start with subject ${subjectID}`);
+makeCharts(subjectID);
 metadata(subjectID);
 startup();
 
 function startup() {
     let selectBox = d3.select("#selDataset");
-    
-    d3.json("samples.json").then((data) => {
+      d3.json("samples.json").then((data) => {
       // console.log(data);
       let boxNames = data.names;
       boxNames.forEach((sample) => {
@@ -22,15 +21,17 @@ function startup() {
   })}
 
 
-function makeCharts (subject) {
+function makeCharts (subjectID) {
 d3.json("./samples.json").then((data) => {
-    let sampleValues = data.samples[subject].sample_values;    // console.log(`sample values:  ${sampleValues}`);
-    let otuIDs = data.samples[subject].otu_ids;     // console.log(`OTU IDs: ${otuIDs}`);
-    let otuLabels = data.samples[subject].otu_labels;    // console.log(otuLabels);
-    let topTenSamples = sampleValues.slice(0,10).reverse();
-    console.log(`top ten samples:  ${topTenSamples}`);
-    let topTenOTU = otuIDs.slice(0,10).reverse();
-    console.log(`top ten OTUid:  ${topTenOTU}`); 
+    let bbData = data.samples;
+    let bbArray = bbData.filter(d => d.id == subjectID);
+    
+//     console.log(`subject id  is  ${subjectID} and result is : ${result}`);
+    let sampleValues = bbArray[0].sample_values;    // console.log(`sample values:  ${sampleValues}`);
+    let otuIDs = bbArray[0].otu_ids;     // console.log(`OTU IDs: ${otuIDs}`);
+    let otuLabels = bbArray[0].otu_labels;  // console.log(otuLabels);
+    let topTenSamples = sampleValues.slice(0,10).reverse(); // console.log(`top ten samples:  ${topTenSamples}`);
+ 
 // Create a horizontal bar chart with a dropdown menu to display the top 10 OTUs found in that individual.
 // create trace for bar 
     let trace =  {
@@ -96,11 +97,10 @@ function metadata(subjectID) {
       let metaData = data.metadata;
       let metaArray = metaData.filter(d => d.id == subjectID);
       let result = metaArray[0];
-      console.log(`subject id  is  ${subjectID} and result is : ${result}`);
+      console.log(`subject id meta is  ${subjectID} and result is : ${result}`);
       let panelData = d3.select("#sample-metadata");
       panelData.html("");
-      console.log(`result: ${result}`);
-
+      
       Object.entries(result).forEach(([key, value]) => {
           let mData = `${key}: ${value}`;
           panelData.append("p").text(mData);
@@ -109,9 +109,9 @@ function metadata(subjectID) {
 }
 
 //function for optionChanged
-function optionChanged(newSubjectId) {
-  makeCharts(newSubject); //need to fix this
-  metadata(newSubjectId);
+function optionChanged(newSubject) {
+  makeCharts(newSubject); 
+  metadata(newSubject);
 }
 
-// let sampleSort = data.samples.sort((a,b) => d3.descending(a.sample_values,b.sample_values));
+
