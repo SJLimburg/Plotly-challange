@@ -1,6 +1,7 @@
 // will need an event to read the test subject id entered - FOr id="selDataset" need to add option values and text for all names
 
 let subjectID = 940;
+let filepath = "plotly_app/static/data/samples.json"
 console.log(`start with subject ${subjectID}`);
 makeCharts(subjectID);
 metadata(subjectID);
@@ -8,7 +9,7 @@ startup();
 
 function startup() {
     let selectBox = d3.select("#selDataset");
-      d3.json("samples.json").then((data) => {
+      d3.json(filepath).then((data) => {
       // console.log(data);
       let boxNames = data.names;
       boxNames.forEach((sample) => {
@@ -22,7 +23,7 @@ function startup() {
 
 
 function makeCharts (subjectID) {
-d3.json("./samples.json").then((data) => {
+d3.json(filepath).then((data) => {
     let bbData = data.samples;
     let bbArray = bbData.filter(d => d.id == subjectID);
     
@@ -93,7 +94,7 @@ Plotly.newPlot('bubble', bubbleChart, layout2);
 
 //function for metadata
 function metadata(subjectID) {
-  d3.json("./samples.json").then((data) => {
+  d3.json(filepath).then((data) => {
       let metaData = data.metadata;
       let metaArray = metaData.filter(d => d.id == subjectID);
       let result = metaArray[0];
@@ -113,5 +114,3 @@ function optionChanged(newSubject) {
   makeCharts(newSubject); 
   metadata(newSubject);
 }
-
-
