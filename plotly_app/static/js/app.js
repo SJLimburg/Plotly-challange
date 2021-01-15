@@ -1,7 +1,7 @@
 // will need an event to read the test subject id entered - FOr id="selDataset" need to add option values and text for all names
 
 let subjectID = 940;
-let filepath = "plotly_app/static/data/samples.json"
+let filepath = "./plotly_app/static/data/samples.json"
 console.log(`start with subject ${subjectID}`);
 makeCharts(subjectID);
 metadata(subjectID);
